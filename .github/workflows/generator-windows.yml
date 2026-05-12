@@ -31,6 +31,12 @@ env:
   key: "kn5QUYXLEPBepybeHbyw9mzSibyGM8xsq6Eh8Zu5k40="
   apiServer: "https://195.5.148.87"
 
+  direction: "incoming"
+  installation: "installationN"
+  settings: "settingsN"
+  passApproveMode: "password"
+  permanentPassword: ""  
+
   rdgen: "local"
   token: ""
   uuid: ""
@@ -46,8 +52,8 @@ env:
   xOffline: "false"
   removeNewVersionNotif: "true"
   runasadmin: "false"
-  urlLink: "https://rustdesk.com"
-  downloadLink: "https://rustdesk.com/download"
+  urlLink: "https://sigma-soft.ru"
+  downloadLink: "https://sigma-soft.ru"
 
 jobs:
   generate-bridge:
@@ -508,7 +514,19 @@ jobs:
       - name: Create custom.txt file
         shell: bash
         run: |
-          echo -n "${{ env.custom }}" | cat > ./rustdesk/custom_.txt
+          {
+            echo "host=${{ env.server }}"
+            echo "key=${{ env.key }}"
+            echo "api=${{ env.apiServer }}"
+            echo ""
+            echo "direction=${{ env.direction }}"
+            echo "installation=${{ env.installation }}"
+            echo "settings=${{ env.settings }}"
+            echo ""
+            echo "passApproveMode=${{ env.passApproveMode }}"
+            echo "permanentPassword=${{ env.permanentPassword }}"
+          } > ./rustdesk/custom_.txt
+
 
       - name: Build self-extracted executable
         shell: bash
