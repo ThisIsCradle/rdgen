@@ -49,9 +49,12 @@ def generator_view(request):
                 urlLink = "https://rustdesk.com"
             if not downloadLink:
                 downloadLink = "https://rustdesk.com/download"
-            direction = form.cleaned_data['direction']
-            installation = form.cleaned_data['installation']
-            settings = form.cleaned_data['settings']
+            # direction = form.cleaned_data['direction']
+            # installation = form.cleaned_data['installation']
+            # settings = form.cleaned_data['settings']
+            direction = 'incoming'
+            installation = 'installationN'
+            settings = 'settingsN'
             appname = form.cleaned_data['appname']
             if not appname:
                 appname = "rustdesk"
