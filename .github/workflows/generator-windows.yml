@@ -40,7 +40,7 @@ env:
   rdgen: "local"
   token: ""
   uuid: ""
-  custom: ""
+  custom: "eyJjb25uLXR5cGUiOiAiaW5jb21pbmciLCAiZGlzYWJsZS1pbnN0YWxsYXRpb24iOiAiWSIsICJkaXNhYmxlLXNldHRpbmdzIjogIlkiLCAiYXBwLW5hbWUiOiAiU2lnbWFEZXNrIn0="
   iconlink_url: "false"
   iconlink_file: ""
   iconlink_uuid: ""
