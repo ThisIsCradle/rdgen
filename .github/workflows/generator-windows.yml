@@ -511,21 +511,28 @@ jobs:
           Remove-Item ./rustdesk/unsigned_files.zip
           Remove-Item ./rustdesk/signed_files.zip
 
+      # - name: Create custom.txt file
+      #   shell: bash
+      #   run: |
+      #     {
+      #       echo "host=${{ env.server }}"
+      #       echo "key=${{ env.key }}"
+      #       echo "api=${{ env.apiServer }}"
+      #       echo ""
+      #       echo "direction=${{ env.direction }}"
+      #       echo "installation=${{ env.installation }}"
+      #       echo "settings=${{ env.settings }}"
+      #       echo ""
+      #       echo "passApproveMode=${{ env.passApproveMode }}"
+      #       echo "permanentPassword=${{ env.permanentPassword }}"
+      #     } > ./rustdesk/custom_.txt
+
+
       - name: Create custom.txt file
         shell: bash
         run: |
-          {
-            echo "host=${{ env.server }}"
-            echo "key=${{ env.key }}"
-            echo "api=${{ env.apiServer }}"
-            echo ""
-            echo "direction=${{ env.direction }}"
-            echo "installation=${{ env.installation }}"
-            echo "settings=${{ env.settings }}"
-            echo ""
-            echo "passApproveMode=${{ env.passApproveMode }}"
-            echo "permanentPassword=${{ env.permanentPassword }}"
-          } > ./rustdesk/custom_.txt
+          echo -n "${{ env.custom }}" > ./rustdesk/custom_.txt
+          echo "custom_.txt created"
 
 
       - name: Build self-extracted executable
