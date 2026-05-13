@@ -67,8 +67,8 @@ def generator_view(request):
                 androidappid = "com.carriez.flutter_hbb"
             compname = compname.replace("&","\\&")
             permPass = form.cleaned_data['permanentPassword']
-            theme = form.cleaned_data['theme']
-            themeDorO = form.cleaned_data['themeDorO']
+            theme = 'light'
+            themeDorO = 'override'
             #runasadmin = form.cleaned_data['runasadmin']
             passApproveMode = form.cleaned_data['passApproveMode']
             denyLan = form.cleaned_data['denyLan']
