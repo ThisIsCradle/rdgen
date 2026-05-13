@@ -94,6 +94,13 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Save branding files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "C:\branding"
+          Copy-Item ".github/icon.png" "C:\branding\icon.png" -Force
+          Copy-Item ".github/Logo.png" "C:\branding\Logo.png" -Force
         
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@v6
@@ -337,7 +344,7 @@ jobs:
       - name: magick stuff
         shell: pwsh
         run: |
-          Copy-Item ".github/icon.png" "./res/icon.png" -Force
+          Copy-Item "C:\branding\icon.png" "./res/icon.png" -Force
           magick ./res/icon.png -define icon:auto-resize=256,64,48,32,16 ./res/icon.ico
           Copy-Item "./res/icon.ico" "./res/tray-icon.ico" -Force
           magick ./res/icon.png -resize 32x32 ./res/32x32.png
@@ -484,8 +491,8 @@ jobs:
 
       - name: logo stuff
         shell: pwsh
-        run: |
-          Copy-Item ".github/Logo.png" "./rustdesk/data/flutter_assets/assets/logo.png" -Force
+        run: |          
+          Copy-Item "C:\branding\Logo.png" "./rustdesk/data/flutter_assets/assets/logo.png" -Force
           Write-Host "Custom app logo applied"
      
       - name: find Runner.res
