@@ -130,7 +130,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ThisIsCradle/rustdesk
-          ref: master
+          ref: sigma-1.4.5
           submodules: recursive
 
       - name: Restore bridge files
