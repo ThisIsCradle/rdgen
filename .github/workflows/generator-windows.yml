@@ -24,8 +24,8 @@ env:
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
   STATUS_URL: ""
 
-  appname: "SigmaDesk"
-  filename: "sigmadesk"
+  appname: "SSQS"
+  filename: "SSQS"
   compname: "Sigma-Soft"
   # server: "195.5.148.87"
   server: "rd.sigma-soft.ru"
@@ -98,12 +98,33 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # - name: Save branding files
+      #   shell: pwsh
+      #   run: |
+      #     New-Item -ItemType Directory -Force -Path "C:\branding"
+      #     Copy-Item ".github/icon.png" "C:\branding\icon.png" -Force
+      #     Copy-Item ".github/Logo.png" "C:\branding\Logo.png" -Force
+
+
       - name: Save branding files
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path "C:\branding"
+
           Copy-Item ".github/icon.png" "C:\branding\icon.png" -Force
+          Copy-Item ".github/icon.ico" "C:\branding\icon.ico" -Force
+
+          Copy-Item ".github/icon_16.png" "C:\branding\icon_16.png" -Force
+          Copy-Item ".github/icon_32.png" "C:\branding\icon_32.png" -Force
+          Copy-Item ".github/icon_48.png" "C:\branding\icon_48.png" -Force
+          Copy-Item ".github/icon_64.png" "C:\branding\icon_64.png" -Force
+          Copy-Item ".github/icon_256.png" "C:\branding\icon_256.png" -Force
+  
           Copy-Item ".github/Logo.png" "C:\branding\Logo.png" -Force
+
+          Write-Host "Branding files saved"
+
+      
         
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@v6
@@ -392,17 +413,40 @@ jobs:
 
 
 
+      # - name: magick stuff
+      #   shell: pwsh
+      #   run: |
+      #     Copy-Item ".github/icon.png" "./res/icon.png" -Force
+      #     Copy-Item ".github/icon.ico" "./res/icon.ico" -Force
+
+      #     Copy-Item ".github/icon_16.png" "./res/icon_16.png" -Force
+      #     Copy-Item ".github/icon_32.png" "./res/icon_32.png" -Force
+      #     Copy-Item ".github/icon_48.png" "./res/icon_48.png" -Force
+      #     Copy-Item ".github/icon_64.png" "./res/icon_64.png" -Force
+      #     Copy-Item ".github/icon_256.png" "./res/icon_256.png" -Force
+
+      #     Copy-Item "./res/icon.ico" "./res/tray-icon.ico" -Force
+
+      #     Copy-Item "./res/icon_32.png" "./res/32x32.png" -Force
+      #     Copy-Item "./res/icon_64.png" "./res/64x64.png" -Force
+
+      #     magick ./res/icon_256.png -resize 128x128 ./res/128x128.png
+      #     magick ./res/128x128.png -resize 200% ./res/128x128@2x.png
+
+      #     Write-Host "Custom app icon applied"
+
+
       - name: magick stuff
         shell: pwsh
         run: |
-          Copy-Item ".github/icon.png" "./res/icon.png" -Force
-          Copy-Item ".github/icon.ico" "./res/icon.ico" -Force
+          Copy-Item "C:\branding\icon.png" "./res/icon.png" -Force
+          Copy-Item "C:\branding\icon.ico" "./res/icon.ico" -Force
 
-          Copy-Item ".github/icon_16.png" "./res/icon_16.png" -Force
-          Copy-Item ".github/icon_32.png" "./res/icon_32.png" -Force
-          Copy-Item ".github/icon_48.png" "./res/icon_48.png" -Force
-          Copy-Item ".github/icon_64.png" "./res/icon_64.png" -Force
-          Copy-Item ".github/icon_256.png" "./res/icon_256.png" -Force
+          Copy-Item "C:\branding\icon_16.png" "./res/icon_16.png" -Force
+          Copy-Item "C:\branding\icon_32.png" "./res/icon_32.png" -Force
+          Copy-Item "C:\branding\icon_48.png" "./res/icon_48.png" -Force
+          Copy-Item "C:\branding\icon_64.png" "./res/icon_64.png" -Force
+          Copy-Item "C:\branding\icon_256.png" "./res/icon_256.png" -Force
 
           Copy-Item "./res/icon.ico" "./res/tray-icon.ico" -Force
 
@@ -413,6 +457,7 @@ jobs:
           magick ./res/128x128.png -resize 200% ./res/128x128@2x.png
 
           Write-Host "Custom app icon applied"
+         
       
 
 
