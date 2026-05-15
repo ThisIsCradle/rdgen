@@ -350,17 +350,69 @@ jobs:
       #       magick ./res/128x128.png -resize 200% ./res/128x128@2x.png
 
 
+      # - name: magick stuff
+      #   shell: pwsh
+      #   run: |
+      #     Copy-Item "C:\branding\icon.png" "./res/icon.png" -Force
+      #     magick ./res/icon.png -define icon:auto-resize=256,64,48,32,16 ./res/icon.ico
+      #     Copy-Item "./res/icon.ico" "./res/tray-icon.ico" -Force
+      #     magick ./res/icon.png -resize 32x32 ./res/32x32.png
+      #     magick ./res/icon.png -resize 64x64 ./res/64x64.png
+      #     magick ./res/icon.png -resize 128x128 ./res/128x128.png
+      #     magick ./res/128x128.png -resize 200% ./res/128x128@2x.png
+      #     Write-Host "Custom app icon applied"
+
+
+
+      # - name: magick stuff
+      #   shell: pwsh
+      #   run: |
+      #     Copy-Item "C:\branding\icon16.png" "./res/icon16.png" -Force
+      #     Copy-Item "C:\branding\icon32.png" "./res/icon32.png" -Force
+      #     Copy-Item "C:\branding\icon48.png" "./res/icon48.png" -Force
+      #     Copy-Item "C:\branding\icon64.png" "./res/icon64.png" -Force
+      #     Copy-Item "C:\branding\icon256.png" "./res/icon256.png" -Force
+
+      #     magick `
+      #       ./res/icon256.png `
+      #       ./res/icon64.png `
+      #       ./res/icon48.png `
+      #       ./res/icon32.png `
+      #       ./res/icon16.png `
+      #       ./res/icon.ico
+
+      #     Copy-Item "./res/icon.ico" "./res/tray-icon.ico" -Force
+
+      #     Copy-Item "./res/icon32.png" "./res/32x32.png" -Force
+      #     Copy-Item "./res/icon64.png" "./res/64x64.png" -Force
+      #     Copy-Item "./res/icon256.png" "./res/128x128.png" -Force
+
+      #     Write-Host "Custom app icon applied"
+
+
+
       - name: magick stuff
         shell: pwsh
         run: |
-          Copy-Item "C:\branding\icon.png" "./res/icon.png" -Force
-          magick ./res/icon.png -define icon:auto-resize=256,64,48,32,16 ./res/icon.ico
+          Copy-Item ".github/icon.png" "./res/icon.png" -Force
+          Copy-Item ".github/icon.ico" "./res/icon.ico" -Force
+
+          Copy-Item ".github/icon_16.png" "./res/icon_16.png" -Force
+          Copy-Item ".github/icon_32.png" "./res/icon_32.png" -Force
+          Copy-Item ".github/icon_48.png" "./res/icon_48.png" -Force
+          Copy-Item ".github/icon_64.png" "./res/icon_64.png" -Force
+          Copy-Item ".github/icon_256.png" "./res/icon_256.png" -Force
+
           Copy-Item "./res/icon.ico" "./res/tray-icon.ico" -Force
-          magick ./res/icon.png -resize 32x32 ./res/32x32.png
-          magick ./res/icon.png -resize 64x64 ./res/64x64.png
-          magick ./res/icon.png -resize 128x128 ./res/128x128.png
+
+          Copy-Item "./res/icon_32.png" "./res/32x32.png" -Force
+          Copy-Item "./res/icon_64.png" "./res/64x64.png" -Force
+
+          magick ./res/icon_256.png -resize 128x128 ./res/128x128.png
           magick ./res/128x128.png -resize 200% ./res/128x128@2x.png
+
           Write-Host "Custom app icon applied"
+      
 
 
       - name: ui.rs icon
