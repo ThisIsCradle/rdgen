@@ -29,7 +29,8 @@ env:
   compname: "Sigma-Soft"
   # server: "195.5.148.87"
   server: "rd.sigma-soft.ru"
-  # key: "kn5QUYXLEPBepybeHbyw9mzSibyGM8xsq6Eh8Zu5k40="
+  # ДЛЯ КЛИЕНТОВ ключ НЕ нужен; СИГМЕ ключ нужен;
+  key: "kn5QUYXLEPBepybeHbyw9mzSibyGM8xsq6Eh8Zu5k40="
   # apiServer: "https://195.5.148.87"
   apiServer: "https://rd.sigma-soft.ru"
 
