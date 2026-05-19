@@ -1,5 +1,5 @@
-name: Custom Windows x86 Client Generator
-run-name: Custom Windows x86 Client Generator
+name: Custom Windows x86 Client Generator1
+run-name: Custom Windows x86 Client Generator1
 on:
   workflow_dispatch:
 
