@@ -550,6 +550,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+
+      - name: Save branding files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "C:\branding"
+          Copy-Item ".github/ssqs.ico" "C:\branding\ssqs.ico" -Force
+          Copy-Item ".github/Logo.png" "C:\branding\Logo.png" -Force
+          Write-Host "Branding files saved"
+
+        
+
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@v6
         with:
@@ -569,13 +580,13 @@ jobs:
           choco install -y imagemagick.app --no-progress
           Get-ChildItem -Path "${env:ProgramFiles}" | % { $_.FullName } | Select-String -Pattern "[\/\\]ImageMagick[^\/\\]*$" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
 
-      - name: Save branding files
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path "C:\branding"
-          Copy-Item ".github/ssqs.ico" "C:\branding\ssqs.ico" -Force
-          Copy-Item ".github/Logo.png" "C:\branding\Logo.png" -Force
-          Write-Host "Branding files saved"
+      # - name: Save branding files
+      #   shell: pwsh
+      #   run: |
+      #     New-Item -ItemType Directory -Force -Path "C:\branding"
+      #     Copy-Item ".github/ssqs.ico" "C:\branding\ssqs.ico" -Force
+      #     Copy-Item ".github/Logo.png" "C:\branding\Logo.png" -Force
+      #     Write-Host "Branding files saved"
 
       - name: change appname to custom
         if: env.appname != 'rustdesk'
