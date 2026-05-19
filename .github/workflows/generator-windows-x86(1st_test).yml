@@ -1,36 +1,277 @@
-name: Custom Windows x86 Client Generator1
-run-name: Custom Windows x86 Client Generator1
+# name: Custom Windows x86 Client Generator1
+# run-name: Custom Windows x86 Client Generator1
+# on:
+#   workflow_dispatch:
+
+# env:
+#   SCITER_RUST_VERSION: "1.75"
+#   RUST_VERSION: "1.75"
+#   CARGO_NDK_VERSION: "3.1.2"
+#   SCITER_ARMV7_CMAKE_VERSION: "3.29.7"
+#   SCITER_NASM_DEBVERSION: "2.15.05-1"
+#   LLVM_VERSION: "15.0.6"
+#   FLUTTER_VERSION: "3.24.5"
+#   ANDROID_FLUTTER_VERSION: "3.24.5"
+#   FLUTTER_ELINUX_VERSION: "3.16.9"
+
+#   VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+#   VCPKG_COMMIT_ID: "120deac3062162151622ca4860575a33844ba10b"
+#   ARMV7_VCPKG_COMMIT_ID: "6f29f12e82a8293156836ad81cc9bf5af41fe836"
+
+#   VERSION: "1.4.5"
+#   NDK_VERSION: "r27c"
+#   UPLOAD_ARTIFACT: "true"
+#   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
+#   STATUS_URL: ""
+
+#   appname: "SSQS"
+#   filename: "SSQS"
+#   compname: "Sigma-Soft"
+#   server: "rd.sigma-soft.ru"
+#   key: "kn5QUYXLEPBepybeHbyw9mzSibyGM8xsq6Eh8Zu5k40="
+#   apiServer: "https://rd.sigma-soft.ru"
+
+#   rdgen: "local"
+#   token: ""
+#   uuid: ""
+#   custom: "eyJjb25uLXR5cGUiOiJvdXRnb2luZyIsImRpc2FibGUtaW5zdGFsbGF0aW9uIjoiWSIsImRpc2FibGUtc2V0dGluZ3MiOiJOIiwiYXBwLW5hbWUiOiJTaWdtYURlc2siLCJvdmVycmlkZS1zZXR0aW5ncyI6eyJ0aGVtZSI6ImxpZ2h0IiwiYWxsb3ctcmVtb3ZlLXdhbGxwYXBlciI6IlkifX0="
+#   iconlink_url: "false"
+#   iconlink_file: ""
+#   iconlink_uuid: ""
+#   logolink_url: "false"
+#   logolink_file: ""
+#   logolink_uuid: ""
+#   delayFix: "false"
+#   cycleMonitor: "false"
+#   xOffline: "false"
+#   removeNewVersionNotif: "true"
+#   runasadmin: "false"
+#   urlLink: "https://sigma-soft.ru"
+#   downloadLink: "https://sigma-soft.ru"
+
+# jobs:
+#   generate-bridge:
+#     uses: ./.github/workflows/bridge.yml
+#     with:
+#       version: "1.4.5"
+
+#   build-RustDeskTempTopMostWindow:
+#     uses: ./.github/workflows/third-party-RustDeskTempTopMostWindow.yml
+#     with:
+#       upload-artifact: true
+#       target: windows-2022
+#       configuration: Release
+#       platform: Win32  # ← Изменено: x64 → Win32
+#       target_version: Windows10
+#     secrets: inherit
+#     strategy:
+#       fail-fast: false
+
+#   build-for-windows-flutter:
+#     name: Build Windows x86
+#     needs: [build-RustDeskTempTopMostWindow, generate-bridge]
+#     runs-on: ${{ matrix.job.os }}
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         job:
+#           - {
+#               target: i686-pc-windows-msvc,  # ← Изменено: x86_64 → i686
+#               os: windows-2022,
+#               arch: x86,                      # ← Изменено: x86_64 → x86
+#               vcpkg-triplet: x86-windows-static,  # ← Изменено: x64 → x86
+#             }
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v4
+
+#       - name: Save branding files
+#         shell: pwsh
+#         run: |
+#           New-Item -ItemType Directory -Force -Path "C:\branding"
+#           Copy-Item ".github/ssqs.ico" "C:\branding\ssqs.ico" -Force
+#           Copy-Item ".github/Logo.png" "C:\branding\Logo.png" -Force
+#           Write-Host "Branding files saved"
+
+#       - name: Export GitHub Actions cache environment variables
+#         uses: actions/github-script@v6
+#         with:
+#           script: |
+#             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+#             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
+#       - name: Checkout source code
+#         uses: actions/checkout@v4
+#         with:
+#           repository: ThisIsCradle/rustdesk
+#           ref: sigma-1.4.5
+#           submodules: recursive
+
+#       - name: Restore bridge files
+#         uses: actions/download-artifact@master
+#         with:
+#           name: bridge-artifact
+#           path: ./
+
+#       - name: Install ImageMagick on Windows
+#         run: |
+#           choco install -y imagemagick.app --no-progress
+#           Get-ChildItem -Path "${env:ProgramFiles}" | % { $_.FullName } | Select-String -Pattern "[\/\\]ImageMagick[^\/\\]*$" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+
+#       - name: fix flutter_gpu_texture_renderer
+#         shell: bash
+#         run: |
+#           sed -i -e 's|2ded7f146437a761ffe6981e2f742038f85ca68d|08a471bb8ceccdd50483c81cdfa8b81b07b14b87|' ./flutter/pubspec.lock
+#           sed -i -e 's|2ded7f146437a761ffe6981e2f742038f85ca68d|08a471bb8ceccdd50483c81cdfa8b81b07b14b87|' ./flutter/pubspec.yaml
+
+#       # ... [все шаги брендирования, патчей, установки зависимостей — без изменений] ...
+
+#       - name: Install Rust toolchain
+#         uses: dtolnay/rust-toolchain@v1
+#         with:
+#           toolchain: ${{ env.SCITER_RUST_VERSION }}
+#           targets: ${{ matrix.job.target }}  # ← Теперь i686-pc-windows-msvc
+#           components: "rustfmt"
+
+#       - uses: Swatinem/rust-cache@v2
+#         with:
+#           prefix-key: ${{ matrix.job.os }}
+
+#       - name: Setup vcpkg with Github Actions binary cache
+#         uses: lukka/run-vcpkg@v11
+#         with:
+#           vcpkgDirectory: C:\vcpkg
+#           vcpkgGitCommitId: ${{ env.VCPKG_COMMIT_ID }}
+#           doNotCache: false
+
+#       - name: Install vcpkg dependencies
+#         env:
+#           VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.job.vcpkg-triplet }}  # ← x86-windows-static
+#         run: |
+#           if ! $VCPKG_ROOT/vcpkg \
+#             install \
+#             --triplet ${{ matrix.job.vcpkg-triplet }} \
+#             --x-install-root="$VCPKG_ROOT/installed"; then
+#             find "${VCPKG_ROOT}/" -name "*.log" | while read -r _1; do
+#               echo "$_1:"
+#               echo "======"
+#               cat "$_1"
+#               echo "======"
+#               echo ""
+#             done
+#             exit 1
+#           fi
+#           head -n 100 "${VCPKG_ROOT}/buildtrees/ffmpeg/build-${{ matrix.job.vcpkg-triplet }}-rel-out.log" || true
+#         shell: bash
+
+#       # ... [шаги с иконками, патчами, custom.txt — без изменений] ...
+
+#       - name: Build rustdesk
+#         run: |
+#           python3 .\build.py --portable --hwcodec --flutter --vram --skip-portable-pack
+#           # ← Изменено: x64 → ia32 (Flutter использует ia32 для x86 Windows)
+#           mv ./flutter/build/windows/ia32/runner/Release ./rustdesk
+
+#           # Download usbmmidd_v2.zip (универсальный, без изменений)
+#           Invoke-WebRequest -Uri https://github.com/rustdesk-org/rdev/releases/download/usbmmidd_v2/usbmmidd_v2.zip -OutFile usbmmidd_v2.zip
+#           Expand-Archive usbmmidd_v2.zip -DestinationPath . -Force
+#           Remove-Item -Path usbmmidd_v2\Win32 -Recurse
+#           Remove-Item -Path "usbmmidd_v2\deviceinstaller64.exe", "usbmmidd_v2\deviceinstaller.exe", "usbmmidd_v2\usbmmidd.bat"
+#           mv -Force .\usbmmidd_v2 ./rustdesk
+
+#           # ... [остальная логика сборки драйверов — без изменений] ...
+
+#       # ... [шаги с иконками, логотипом, Runner.res — без изменений] ...
+
+#       - name: Download RustDeskTempTopMostWindow artifacts
+#         uses: actions/download-artifact@master
+#         if: env.UPLOAD_ARTIFACT == 'true'
+#         with:
+#           name: topmostwindow-artifacts  # ← Убедитесь, что воркфлоу TopMostWindow собрал Win32-версию
+#           path: "./rustdesk"
+
+#       # ... [шаги подписи, zip, portable-упаковки — без изменений] ...
+
+#       - name: Build self-extracted executable
+#         shell: bash
+#         if: env.UPLOAD_ARTIFACT == 'true'
+#         run: |
+#           mv "./rustdesk/rustdesk.exe" "./rustdesk/${{ env.appname }}.exe" || echo "rustdesk.exe"
+#           sed -i '/dpiAware/d' res/manifest.xml
+#           pushd ./libs/portable
+#           pip3 install -r requirements.txt
+#           python3 ./generate.py -f ../../rustdesk/ -o . -e "../../rustdesk/${{ env.appname }}.exe"
+#           popd
+#           mkdir -p ./SignOutput
+#           mv ./target/release/rustdesk-portable-packer.exe "./SignOutput/rustdesk.exe"
+
+#       - name: Add MSBuild to PATH
+#         uses: microsoft/setup-msbuild@v2
+
+#       - name: Build msi
+#         continue-on-error: true
+#         if: env.UPLOAD_ARTIFACT == 'true'
+#         run: |
+#           $myappname = "${{ env.appname }}" -replace '\s','_'
+#           cp "rustdesk/${{ env.appname }}.exe" "rustdesk/${myappname}.exe" -ErrorAction SilentlyContinue
+#           pushd ./res/msi
+#           python preprocess.py --app-name "$myappname" --arp -d ../../rustdesk
+#           nuget restore msi.sln
+#           # ← Изменено: Platform=x64 → Platform=Win32
+#           msbuild msi.sln -p:Configuration=Release -p:Platform=Win32 /p:TargetVersion=Windows10
+#           cp ./Package/bin/Win32/Release/en-us/Package.msi ../../SignOutput/rustdesk-latest.msi
+#           mv ./Package/bin/Win32/Release/en-us/Package.msi ../../SignOutput/rustdesk.msi
+#           sha256sum ../../SignOutput/rustdesk.msi
+
+#       # ... [финальные шаги подписи, переименования — без изменений] ...
+
+#       - name: Upload SigmaDesk artifacts
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: SigmaDesk-Windows-x86  # ← Добавлен суффикс -x86
+#           path: |
+#             ./SignOutput/${{ env.filename }}.exe
+#             ./SignOutput/${{ env.filename }}.msi
+
+
+
+
+name: Custom Windows x86 Client Generator (Flutter)
+run-name: Custom Windows x86 Client Generator (Flutter)
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'version to build'
+        required: true
+        default: ''
+        type: string
+      zip_url:
+        description: 'url to zip of json'
+        required: true
+        default: ''
+        type: string
 
 env:
-  SCITER_RUST_VERSION: "1.75"
-  RUST_VERSION: "1.75"
-  CARGO_NDK_VERSION: "3.1.2"
-  SCITER_ARMV7_CMAKE_VERSION: "3.29.7"
-  SCITER_NASM_DEBVERSION: "2.15.05-1"
-  LLVM_VERSION: "15.0.6"
+  # === Rust/Flutter versions ===
+  RUST_VERSION: "1.75"                    # stable, не nightly!
   FLUTTER_VERSION: "3.24.5"
-  ANDROID_FLUTTER_VERSION: "3.24.5"
-  FLUTTER_ELINUX_VERSION: "3.16.9"
-
-  VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+  LLVM_VERSION: "15.0.6"
   VCPKG_COMMIT_ID: "120deac3062162151622ca4860575a33844ba10b"
-  ARMV7_VCPKG_COMMIT_ID: "6f29f12e82a8293156836ad81cc9bf5af41fe836"
-
-  VERSION: "1.4.5"
-  NDK_VERSION: "r27c"
-  UPLOAD_ARTIFACT: "true"
-  SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
-  STATUS_URL: ""
-
+  
+  # === App branding ===
+  VERSION: "${{ inputs.version }}"
   appname: "SSQS"
   filename: "SSQS"
   compname: "Sigma-Soft"
   server: "rd.sigma-soft.ru"
   key: "kn5QUYXLEPBepybeHbyw9mzSibyGM8xsq6Eh8Zu5k40="
   apiServer: "https://rd.sigma-soft.ru"
-
+  
+  # === Build config ===
+  UPLOAD_ARTIFACT: 'true'
+  SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
+  STATUS_URL: "${{ secrets.GENURL }}/updategh "
   rdgen: "local"
   token: ""
   uuid: ""
@@ -49,49 +290,52 @@ env:
   urlLink: "https://sigma-soft.ru"
   downloadLink: "https://sigma-soft.ru"
 
+  # === vcpkg ===
+  VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+  VCPKG_DEFAULT_HOST_TRIPLET: "x86-windows-static"
+
 jobs:
-  generate-bridge:
-    uses: ./.github/workflows/bridge.yml
+  setup:
+    uses: ./.github/workflows/fetch-encrypted-secrets.yml
     with:
-      version: "1.4.5"
+      zip_url_json: ${{ inputs.zip_url }}
 
-  build-RustDeskTempTopMostWindow:
-    uses: ./.github/workflows/third-party-RustDeskTempTopMostWindow.yml
-    with:
-      upload-artifact: true
-      target: windows-2022
-      configuration: Release
-      platform: Win32  # ← Изменено: x64 → Win32
-      target_version: Windows10
-    secrets: inherit
-    strategy:
-      fail-fast: false
-
-  build-for-windows-flutter:
-    name: Build Windows x86
-    needs: [build-RustDeskTempTopMostWindow, generate-bridge]
-    runs-on: ${{ matrix.job.os }}
+  build-for-windows-flutter-x86:
+    name: Build Windows x86 (Flutter)
+    needs: setup
+    runs-on: windows-2022
     strategy:
       fail-fast: false
       matrix:
         job:
           - {
-              target: i686-pc-windows-msvc,  # ← Изменено: x86_64 → i686
+              target: i686-pc-windows-msvc,
               os: windows-2022,
-              arch: x86,                      # ← Изменено: x86_64 → x86
-              vcpkg-triplet: x86-windows-static,  # ← Изменено: x64 → x86
+              arch: x86,
+              vcpkg-triplet: x86-windows-static,
             }
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Save branding files
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path "C:\branding"
-          Copy-Item ".github/ssqs.ico" "C:\branding\ssqs.ico" -Force
-          Copy-Item ".github/Logo.png" "C:\branding\Logo.png" -Force
-          Write-Host "Branding files saved"
+      - uses: actions/download-artifact@v4
+        with:
+          name: encrypted-secrets-zip
+
+      - name: Load Secrets
+        uses: ./.github/actions/decrypt-secrets
+        with:
+          zip_password: ${{ secrets.ZIP_PASSWORD }}
+
+      - name: Finalize and Cleanup zip/json
+        if: always()
+        continue-on-error: true
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "${{ secrets.GENURL }}/cleanzip "
+          method: 'POST'
+          customHeaders: '{ "Content-Type ": "application/json "}'
+          data: '{ "uuid ": "${{ env.uuid }} "}'
 
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@v6
@@ -100,43 +344,103 @@ jobs:
             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
+      - name: Set rdgen value
+        if: ${{ env.rdgen == 'true' }}
+        run: echo "STATUS_URL=${{ secrets.GENURL }}/updategh " >> $env:GITHUB_ENV
+
+      - name: Set rdgen value
+        if: ${{ env.rdgen == 'false' }}
+        run: echo "STATUS_URL=${{ env.apiServer }}/api/updategh " >> $env:GITHUB_ENV
+
+      # === Checkout your fork ===
       - name: Checkout source code
+        if: ${{ env.VERSION != 'master' }}
         uses: actions/checkout@v4
         with:
           repository: ThisIsCradle/rustdesk
-          ref: sigma-1.4.5
+          ref: ${{ env.VERSION }}
           submodules: recursive
 
-      - name: Restore bridge files
-        uses: actions/download-artifact@master
+      - name: Checkout source code (master)
+        if: ${{ env.VERSION == 'master' }}
+        uses: actions/checkout@v4
         with:
-          name: bridge-artifact
-          path: ./
+          repository: ThisIsCradle/rustdesk
+          submodules: recursive
 
-      - name: Install ImageMagick on Windows
+      # === Install Flutter for x86 ===
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          architecture: x86  # ← критично для ia32-сборки
+          cache: true
+
+      - name: Install ImageMagick
         run: |
           choco install -y imagemagick.app --no-progress
           Get-ChildItem -Path "${env:ProgramFiles}" | % { $_.FullName } | Select-String -Pattern "[\/\\]ImageMagick[^\/\\]*$" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
 
-      - name: fix flutter_gpu_texture_renderer
+      # === Branding: appname ===
+      - name: change appname to custom
+        if: env.appname != 'rustdesk'
+        continue-on-error: true
         shell: bash
         run: |
-          sed -i -e 's|2ded7f146437a761ffe6981e2f742038f85ca68d|08a471bb8ceccdd50483c81cdfa8b81b07b14b87|' ./flutter/pubspec.lock
-          sed -i -e 's|2ded7f146437a761ffe6981e2f742038f85ca68d|08a471bb8ceccdd50483c81cdfa8b81b07b14b87|' ./flutter/pubspec.yaml
+          sed -i -e 's|description = "RustDesk Remote Desktop"|description = "${{ env.appname }}"|' ./Cargo.toml
+          sed -i -e 's|ProductName = "RustDesk"|ProductName = "${{ env.appname }}"|' ./Cargo.toml
+          sed -i -e 's|FileDescription = "RustDesk Remote Desktop"|FileDescription = "${{ env.appname }}"|' ./Cargo.toml
+          sed -i -e 's|OriginalFilename = "rustdesk.exe"|OriginalFilename = "${{ env.appname }}.exe"|' ./Cargo.toml
+          sed -i -e 's|description = "RustDesk Remote Desktop"|description = "${{ env.appname }}"|' ./libs/portable/Cargo.toml
+          sed -i -e 's|const APP_PREFIX: \&str = "rustdesk";|const APP_PREFIX: \&str = "${{ env.appname }}";|' ./libs/portable/src/main.rs
+          find ./src/lang -name "*.rs" -exec sed -i -e 's|RustDesk|${{ env.appname }}|' {} \;
 
-      # ... [все шаги брендирования, патчей, установки зависимостей — без изменений] ...
+      # === Branding: company, url, server ===
+      - name: change company name
+        if: env.compname != 'Purslane Ltd'
+        continue-on-error: true
+        shell: bash
+        run: |
+          sed -i -e 's|PURSLANE|${{ env.compname }}|' ./res/msi/preprocess.py
+          sed -i -e 's|Purslane Ltd|${{ env.compname }}|' ./res/msi/preprocess.py
+          sed -i -e 's|Purslane Ltd|${{ env.compname }}|' ./Cargo.toml
 
+      - name: change url to custom
+        if: env.urlLink != 'https://rustdesk.com'
+        continue-on-error: true
+        shell: bash
+        run: |
+          sed -i -e "s|https://rustdesk.com|${{ env.urlLink }}|g" ./build.py ./src/ui/index.tis ./res/setup.nsi
+
+      - name: set server, key, and apiserver
+        continue-on-error: true
+        shell: bash
+        run: |
+          sed -i -e 's|rs-ny.rustdesk.com|${{ env.server }}|' ./libs/hbb_common/src/config.rs
+          sed -i -e 's|OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=|${{ env.key }}|' ./libs/hbb_common/src/config.rs
+          sed -i -e 's|https://admin.rustdesk.com|${{ env.apiServer }}|' ./src/common.rs
+
+      # === LLVM для bindgen ===
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: ${{ env.LLVM_VERSION }}
+          directory: ${{ runner.temp }}/llvm
+
+      # === Rust toolchain: STABLE, не nightly! ===
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@v1
         with:
-          toolchain: ${{ env.SCITER_RUST_VERSION }}
-          targets: ${{ matrix.job.target }}  # ← Теперь i686-pc-windows-msvc
+          toolchain: ${{ env.RUST_VERSION }}
+          targets: ${{ matrix.job.target }}
           components: "rustfmt"
 
       - uses: Swatinem/rust-cache@v2
         with:
-          prefix-key: ${{ matrix.job.os }}
+          prefix-key: ${{ matrix.job.os }}-flutter
 
+      # === vcpkg setup ===
       - name: Setup vcpkg with Github Actions binary cache
         uses: lukka/run-vcpkg@v11
         with:
@@ -144,91 +448,184 @@ jobs:
           vcpkgGitCommitId: ${{ env.VCPKG_COMMIT_ID }}
           doNotCache: false
 
+      # === КРИТИЧНО: экспорт переменных для bindgen ===
+      - name: Export vcpkg env for bindgen
+        shell: bash
+        run: |
+          echo "VCPKG_ROOT=$VCPKG_ROOT" >> $GITHUB_ENV
+          echo "VCPKG_DEFAULT_HOST_TRIPLET=${{ matrix.job.vcpkg-triplet }}" >> $GITHUB_ENV
+          echo "VCPKG_DEFAULT_TRIPLET=${{ matrix.job.vcpkg-triplet }}" >> $GITHUB_ENV
+          
+          # Найти libclang.dll и установить LIBCLANG_PATH
+          LIBCLANG_PATH=$(find "$VCPKG_ROOT/installed" -name "libclang.dll" 2>/dev/null | head -1 | xargs dirname | tr '\\' '/')
+          echo "LIBCLANG_PATH=$LIBCLANG_PATH" >> $GITHUB_ENV
+          echo "LIBCLANG_STATIC_PATH=$LIBCLANG_PATH" >> $GITHUB_ENV
+          
+          # Добавить include-пути vcpkg для clang
+          VCPKG_INCLUDE="$VCPKG_ROOT/installed/${{ matrix.job.vcpkg-triplet }}/include"
+          echo "CFLAGS=-I$VCPKG_INCLUDE" >> $GITHUB_ENV
+          echo "CXXFLAGS=-I$VCPKG_INCLUDE" >> $GITHUB_ENV
+
       - name: Install vcpkg dependencies
         env:
-          VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.job.vcpkg-triplet }}  # ← x86-windows-static
+          VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.job.vcpkg-triplet }}
         run: |
-          if ! $VCPKG_ROOT/vcpkg \
-            install \
+          if ! $VCPKG_ROOT/vcpkg install \
             --triplet ${{ matrix.job.vcpkg-triplet }} \
             --x-install-root="$VCPKG_ROOT/installed"; then
             find "${VCPKG_ROOT}/" -name "*.log" | while read -r _1; do
-              echo "$_1:"
-              echo "======"
-              cat "$_1"
-              echo "======"
-              echo ""
+              echo "$_1:"; echo "======"; cat "$_1"; echo "======"; echo ""
             done
             exit 1
           fi
           head -n 100 "${VCPKG_ROOT}/buildtrees/ffmpeg/build-${{ matrix.job.vcpkg-triplet }}-rel-out.log" || true
         shell: bash
 
-      # ... [шаги с иконками, патчами, custom.txt — без изменений] ...
-
-      - name: Build rustdesk
+      # === Icon handling (опционально) ===
+      - name: icon stuff
+        if: ${{ env.iconlink_url != 'false' }}
+        continue-on-error: true
+        shell: bash
         run: |
-          python3 .\build.py --portable --hwcodec --flutter --vram --skip-portable-pack
-          # ← Изменено: x64 → ia32 (Flutter использует ia32 для x86 Windows)
-          mv ./flutter/build/windows/ia32/runner/Release ./rustdesk
+          mv ./res/icon.ico ./res/icon.ico.bak 2>/dev/null || true
+          mv ./res/icon.png ./res/icon.png.bak 2>/dev/null || true
 
-          # Download usbmmidd_v2.zip (универсальный, без изменений)
-          Invoke-WebRequest -Uri https://github.com/rustdesk-org/rdev/releases/download/usbmmidd_v2/usbmmidd_v2.zip -OutFile usbmmidd_v2.zip
-          Expand-Archive usbmmidd_v2.zip -DestinationPath . -Force
-          Remove-Item -Path usbmmidd_v2\Win32 -Recurse
-          Remove-Item -Path "usbmmidd_v2\deviceinstaller64.exe", "usbmmidd_v2\deviceinstaller.exe", "usbmmidd_v2\usbmmidd.bat"
-          mv -Force .\usbmmidd_v2 ./rustdesk
-
-          # ... [остальная логика сборки драйверов — без изменений] ...
-
-      # ... [шаги с иконками, логотипом, Runner.res — без изменений] ...
-
-      - name: Download RustDeskTempTopMostWindow artifacts
-        uses: actions/download-artifact@master
-        if: env.UPLOAD_ARTIFACT == 'true'
+      - name: magick stuff
+        if: ${{ env.iconlink_url != 'false' }}
+        uses: nick-fields/retry@v3
         with:
-          name: topmostwindow-artifacts  # ← Убедитесь, что воркфлоу TopMostWindow собрал Win32-версию
-          path: "./rustdesk"
+          timeout_minutes: 1
+          max_attempts: 3
+          shell: pwsh
+          command: |
+            Invoke-WebRequest -Uri "${{ env.iconlink_url }}/get_png?filename=${{ env.iconlink_file }}&uuid=${{ env.iconlink_uuid }}" -OutFile ./res/icon.png
+            magick ./res/icon.png -define icon:auto-resize=256,64,48,32,16 ./res/icon.ico
+            cp ./res/icon.ico ./res/tray-icon.ico
 
-      # ... [шаги подписи, zip, portable-упаковки — без изменений] ...
+      # === ПАПЧИ: allowCustom, delayFix, removeNewVersionNotif ===
+      - name: allow custom.txt
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 1
+          max_attempts: 3
+          shell: pwsh
+          continue-on-error: true
+          command: |
+            Invoke-WebRequest -Uri https://raw.githubusercontent.com/bryangerlach/rdgen/refs/heads/master/.github/patches/allowCustom.diff -OutFile allowCustom.diff
+            git apply allowCustom.diff || true
+
+      - name: fix connection delay
+        continue-on-error: true
+        if: ${{ env.delayFix == 'true' }}
+        shell: bash
+        run: sed -i -e 's|!key.is_empty()|false|' ./src/client.rs
+
+      - name: removeNewVersionNotif
+        continue-on-error: true
+        if: env.removeNewVersionNotif == 'true'
+        shell: bash
+        run: |
+          sed -i -e 's|{software_update_url ? <UpdateMe /> : ""}||' ./src/ui/index.tis
+          sed -i '/let (request, url) =/,/Ok(())/{/Ok(())/!d}' ./src/common.rs || true
+
+      # === BUILD: Flutter вместо cargo build ===
+      - name: Build rustdesk (Flutter)
+        id: build
+        shell: bash
+        run: |
+          # Сборка через build.py с флагами Flutter
+          python3 ./build.py --portable --hwcodec --flutter --vram --skip-portable-pack
+          
+          # Flutter для x86 использует ia32, не x64
+          if [ ! -d "./flutter/build/windows/ia32/runner/Release" ]; then
+            echo "ERROR: Flutter build output not found at ia32 path"
+            find ./flutter/build -name "Release" -type d || true
+            exit 1
+          fi
+          
+          mkdir -p ./Release
+          mv ./flutter/build/windows/ia32/runner/Release/* ./Release/ || true
+          
+          # Драйвер usbmmidd (универсальный)
+          curl -LJ -o ./usbmmidd_v2.zip https://github.com/rustdesk-org/rdev/releases/download/usbmmidd_v2/usbmmidd_v2.zip
+          unzip -q usbmmidd_v2.zip
+          rm -rf ./usbmmidd_v2/deviceinstaller.exe ./usbmmidd_v2/usbmmidd.bat
+          mv ./usbmmidd_v2 ./Release || true
+          
+          echo "output_folder=./Release" >> $GITHUB_OUTPUT
+
+      # === Подпись и упаковка (как в оригинале) ===
+      - name: zip dlls
+        continue-on-error: true
+        shell: pwsh
+        run: Compress-Archive -Path ./Release/*.dll,./Release/*.exe -DestinationPath ./Release/unsigned_files.zip -CompressionLevel Fastest
+
+      - name: sign dlls
+        continue-on-error: true
+        shell: bash
+        run: |
+          if [ ! -z "${{ secrets.SIGN_BASE_URL }}" ] && [ ! -z "${{ secrets.SIGN_API_KEY }}" ]; then
+            curl -X POST -F "file=@./Release/unsigned_files.zip" \
+              -H "X-API-KEY: ${{ secrets.SIGN_API_KEY }}" \
+              -m 900 "${{ secrets.SIGN_BASE_URL }}/sign/" -o ./Release/signed_files.zip
+          else
+            cp ./Release/unsigned_files.zip ./Release/signed_files.zip
+          fi
+
+      - name: unzip dlls
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          Expand-Archive -Path ./Release/signed_files.zip -DestinationPath ./Release/ -Force
+          Remove-Item ./Release/unsigned_files.zip ./Release/signed_files.zip
+
+      - name: Create custom.txt file
+        shell: bash
+        run: echo -n "${{ env.custom }}" > ./Release/custom.txt
 
       - name: Build self-extracted executable
         shell: bash
-        if: env.UPLOAD_ARTIFACT == 'true'
         run: |
-          mv "./rustdesk/rustdesk.exe" "./rustdesk/${{ env.appname }}.exe" || echo "rustdesk.exe"
+          mv "./Release/rustdesk.exe" "./Release/${{ env.appname }}.exe" || true
           sed -i '/dpiAware/d' res/manifest.xml
           pushd ./libs/portable
           pip3 install -r requirements.txt
-          python3 ./generate.py -f ../../rustdesk/ -o . -e "../../rustdesk/${{ env.appname }}.exe"
+          python3 ./generate.py -f ../../Release/ -o . -e "../../Release/${{ env.appname }}.exe"
           popd
           mkdir -p ./SignOutput
           mv ./target/release/rustdesk-portable-packer.exe "./SignOutput/rustdesk.exe"
 
-      - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v2
-
-      - name: Build msi
+      - name: sign exe
         continue-on-error: true
-        if: env.UPLOAD_ARTIFACT == 'true'
+        shell: bash
         run: |
-          $myappname = "${{ env.appname }}" -replace '\s','_'
-          cp "rustdesk/${{ env.appname }}.exe" "rustdesk/${myappname}.exe" -ErrorAction SilentlyContinue
-          pushd ./res/msi
-          python preprocess.py --app-name "$myappname" --arp -d ../../rustdesk
-          nuget restore msi.sln
-          # ← Изменено: Platform=x64 → Platform=Win32
-          msbuild msi.sln -p:Configuration=Release -p:Platform=Win32 /p:TargetVersion=Windows10
-          cp ./Package/bin/Win32/Release/en-us/Package.msi ../../SignOutput/rustdesk-latest.msi
-          mv ./Package/bin/Win32/Release/en-us/Package.msi ../../SignOutput/rustdesk.msi
-          sha256sum ../../SignOutput/rustdesk.msi
+          if [ ! -z "${{ secrets.SIGN_BASE_URL }}" ] && [ ! -z "${{ secrets.SIGN_API_KEY }}" ]; then
+            curl -X POST -F "file=@./SignOutput/rustdesk.exe" \
+              -H "X-API-KEY: ${{ secrets.SIGN_API_KEY }}" \
+              -m 900 "${{ secrets.SIGN_BASE_URL }}/sign/" -o ./SignOutput/signed.exe
+            mv ./SignOutput/signed.exe "./SignOutput/${{ env.filename }}.exe"
+          else
+            mv "./SignOutput/rustdesk.exe" "./SignOutput/${{ env.filename }}.exe"
+          fi
 
-      # ... [финальные шаги подписи, переименования — без изменений] ...
-
-      - name: Upload SigmaDesk artifacts
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
+        if: env.UPLOAD_ARTIFACT == 'true'
         with:
-          name: SigmaDesk-Windows-x86  # ← Добавлен суффикс -x86
-          path: |
-            ./SignOutput/${{ env.filename }}.exe
-            ./SignOutput/${{ env.filename }}.msi
+          name: ${{ env.filename }}-Windows-x86-Flutter
+          path: ./SignOutput/${{ env.filename }}.exe
+
+  cleanup:
+    needs: [build-for-windows-flutter-x86]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    if: always()
+    steps:
+      - name: Delete secrets artifact
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: encrypted-secrets-zip
+
+
+
+
