@@ -381,6 +381,26 @@ jobs:
           Remove-Item ./Release/unsigned_files.zip
           Remove-Item ./Release/signed_files.zip
 
+# 
+# 
+# 
+# 
+# 
+# 
+      - name: Load custom settings from repo
+        shell: bash
+        run: |
+          # Читаем файл и сохраняем в переменную окружения
+          CUSTOM_JSON=$(cat .github/custom.json | tr -d '\n' | sed 's/"/\\"/g')
+          echo "custom=${CUSTOM_JSON}" >> $GITHUB_ENV
+
+# 
+# 
+# 
+# 
+# 
+# 
+
       - name: Create custom.txt file
         shell: bash
         run: |
