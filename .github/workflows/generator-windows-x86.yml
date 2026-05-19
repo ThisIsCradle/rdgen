@@ -222,25 +222,46 @@ jobs:
           vcpkgGitCommitId: ${{ env.VCPKG_COMMIT_ID }}
           doNotCache: false
 
+      # - name: Install vcpkg dependencies
+      #   env:
+      #     VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.job.vcpkg-triplet }}
+      #   run: |
+      #     if ! $VCPKG_ROOT/vcpkg \
+      #       install \
+      #       --triplet ${{ matrix.job.vcpkg-triplet }} \
+      #       --x-install-root= "$VCPKG_ROOT/installed "; then
+      #       find  "${VCPKG_ROOT}/ " -name  "*.log " | while read -r _1; do
+      #         echo  "$_1: "
+      #         echo  "====== "
+      #         cat  "$_1 "
+      #         echo  "====== "
+      #         echo  " "
+      #       done
+      #       exit 1
+      #     fi
+      #     head -n 100  "${VCPKG_ROOT}/buildtrees/ffmpeg/build-${{ matrix.job.vcpkg-triplet }}-rel-out.log " || true
+      #   shell: bash
+
+
       - name: Install vcpkg dependencies
         env:
           VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.job.vcpkg-triplet }}
+          VCPKG_DEFAULT_TRIPLET: ${{ matrix.job.vcpkg-triplet }}
         run: |
-          if ! $VCPKG_ROOT/vcpkg \
-            install \
-            --triplet ${{ matrix.job.vcpkg-triplet }} \
-            --x-install-root= "$VCPKG_ROOT/installed "; then
-            find  "${VCPKG_ROOT}/ " -name  "*.log " | while read -r _1; do
-              echo  "$_1: "
-              echo  "====== "
-              cat  "$_1 "
-              echo  "====== "
-              echo  " "
+          if ! "$VCPKG_ROOT/vcpkg" install \
+            --triplet "${{ matrix.job.vcpkg-triplet }}" \
+            --x-install-root="$VCPKG_ROOT/installed"; then
+            find "${VCPKG_ROOT}/" -name "*.log" | while read -r _1; do
+              echo "$_1: "
+              echo "======"
+              cat "$_1"
+              echo "======"
+              echo " "
             done
             exit 1
           fi
-          head -n 100  "${VCPKG_ROOT}/buildtrees/ffmpeg/build-${{ matrix.job.vcpkg-triplet }}-rel-out.log " || true
-        shell: bash
+          head -n 100 "${VCPKG_ROOT}/buildtrees/ffmpeg/build-${{ matrix.job.vcpkg-triplet }}-rel-out.log" || true
+        shell: bash      
 
       - name: icon stuff
         continue-on-error: true
