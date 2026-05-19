@@ -387,12 +387,12 @@ jobs:
 # 
 # 
 # 
-      - name: Load custom settings from repo
-        shell: bash
-        run: |
-          # Читаем файл и сохраняем в переменную окружения
-          CUSTOM_JSON=$(cat .github/custom.json | tr -d '\n' | sed 's/"/\\"/g')
-          echo "custom=${CUSTOM_JSON}" >> $GITHUB_ENV
+      # - name: Load custom settings from repo
+      #   shell: bash
+      #   run: |
+      #     # Читаем файл и сохраняем в переменную окружения
+      #     CUSTOM_JSON=$(cat .github/custom.json | tr -d '\n' | sed 's/"/\\"/g')
+      #     echo "custom=${CUSTOM_JSON}" >> $GITHUB_ENV
 
 # 
 # 
