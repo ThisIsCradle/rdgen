@@ -240,17 +240,17 @@ name: Custom Windows x86 Client Generator (Flutter)
 run-name: Custom Windows x86 Client Generator (Flutter)
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'version to build'
-        required: true
-        default: ''
-        type: string
-      zip_url:
-        description: 'url to zip of json'
-        required: true
-        default: ''
-        type: string
+    # inputs:
+    #   version:
+    #     description: 'version to build'
+    #     required: true
+    #     default: ''
+    #     type: string
+    #   zip_url:
+    #     description: 'url to zip of json'
+    #     required: true
+    #     default: ''
+    #     type: string
 
 env:
   # === Rust/Flutter versions ===
