@@ -676,7 +676,8 @@ jobs:
           timeout_minutes: 1
           max_attempts: 3
           shell: pwsh
-          continue_on_error: true
+          # continue_on_error: true
+          continue_on_error: false
           command: |
             Invoke-WebRequest -Uri https://raw.githubusercontent.com/bryangerlach/rdgen/refs/heads/master/.github/patches/allowCustom.py -OutFile allowCustom.py
             python allowCustom.py
