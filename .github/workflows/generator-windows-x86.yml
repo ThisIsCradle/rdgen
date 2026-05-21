@@ -713,7 +713,7 @@ jobs:
           continue_on_error: false
           command: |
             Invoke-WebRequest -Uri https://raw.githubusercontent.com/bryangerlach/rdgen/refs/heads/master/.github/patches/allowCustom.diff -OutFile allowCustom.diff           
-            git apply removeSetupServerTip.diff
+            git apply allowCustom.diff
 
 
 
