@@ -569,28 +569,28 @@ jobs:
             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          repository: ThisIsCradle/rustdesk
+          ref: sigma-1.4.5
+          submodules: recursive
+
+
       # - name: Checkout source code
+      #   if: ${{ env.VERSION != 'master' }}
       #   uses: actions/checkout@v4
       #   with:
-      #     repository: ThisIsCradle/rustdesk
-      #     ref: sigma-1.4.5
+      #     repository: rustdesk/rustdesk
+      #     ref: refs/tags/${{ env.VERSION }}
       #     submodules: recursive
 
-
-      - name: Checkout source code
-        if: ${{ env.VERSION != 'master' }}
-        uses: actions/checkout@v4
-        with:
-          repository: rustdesk/rustdesk
-          ref: refs/tags/${{ env.VERSION }}
-          submodules: recursive
-
-      - name: Checkout source code
-        if: ${{ env.VERSION == 'master' }}
-        uses: actions/checkout@v4
-        with:
-          repository: rustdesk/rustdesk
-          submodules: recursive
+      # - name: Checkout source code
+      #   if: ${{ env.VERSION == 'master' }}
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: rustdesk/rustdesk
+      #     submodules: recursive
 
       
 
@@ -704,14 +704,14 @@ jobs:
       #       git apply removeSetupServerTip.diff
 
 
-      - name: customize powered-by block
-        continue-on-error: true
-        shell: bash
-        run: |
-          sed -i 's|{translate..powered_by_me..}|<a href="https://sigma-soft.ru/" style="color:#0066cc;text-decoration:none;cursor:pointer;">Создано в Сигма-Софт</a><br/>на основе RustDesk|g' ./src/ui/index.tis
-          sed -i 's|<div #powered-by \.link style=|<div #powered-by style=|g' ./src/ui/index.tis
-          sed -i 's|handler.open_url("https://rustdesk.com");|handler.open_url("https://sigma-soft.ru/");|g' ./src/ui/index.tis
-          sed -i 's|event click \$(#powered-by) {|event click $(#powered-by a) {|g' ./src/ui/index.tis
+      # - name: customize powered-by block
+      #   continue-on-error: true
+      #   shell: bash
+      #   run: |
+      #     sed -i 's|{translate..powered_by_me..}|<a href="https://sigma-soft.ru/" style="color:#0066cc;text-decoration:none;cursor:pointer;">Создано в Сигма-Софт</a><br/>на основе RustDesk|g' ./src/ui/index.tis
+      #     sed -i 's|<div #powered-by \.link style=|<div #powered-by style=|g' ./src/ui/index.tis
+      #     sed -i 's|handler.open_url("https://rustdesk.com");|handler.open_url("https://sigma-soft.ru/");|g' ./src/ui/index.tis
+      #     sed -i 's|event click \$(#powered-by) {|event click $(#powered-by a) {|g' ./src/ui/index.tis
 
 
       - name: allow custom.txt
